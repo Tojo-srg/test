@@ -44,6 +44,11 @@ class Client
      */
     private Collection $factures;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="clients")
+     */
+    private $user;
+
     public function __construct()
     {
         $this->factures = new ArrayCollection();
@@ -128,6 +133,18 @@ class Client
                 $facture->setClient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
 
         return $this;
     }
