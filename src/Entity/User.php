@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,8 +12,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ApiResource()
  */
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
@@ -138,10 +140,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function getUsername()
-    {
-        // TODO: Implement getUsername() method.
-    }
+//    public function getUsername(): string
+//    {
+//        // TODO: Implement getUsername() method.
+//    }
 
     public function getNom(): ?string
     {
@@ -195,5 +197,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function getUsername()
+    {
+        // TODO: Implement getUsername() method.
     }
 }

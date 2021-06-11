@@ -2,11 +2,21 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\FactureRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=FactureRepository::class)
+ * @ApiResource(
+ *     attributes={
+            "pagination_enabled"=true,
+ *          "pagination_items_per_page"=10,
+ *          "order": {"envoye":"desc"}
+ *     }
+ * )
+ * @ApiFilter()
  */
 class Facture
 {
