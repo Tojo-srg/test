@@ -9,50 +9,55 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ApiResource()
  */
-class User implements UserInterface, \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"clients_read", "factures_read"})
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * @Groups("clients_read", "factures_read")
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"clients_read", "factures_read"})
      */
-    private $nom;
+    private ?string $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"clients_read", "factures_read"})
      */
-    private $prenom;
+    private ?string $prenom;
 
     /**
      * @ORM\OneToMany(targetEntity=Client::class, mappedBy="user")
      */
-    private $clients;
+    private Collection $clients;
 
     public function __construct()
     {

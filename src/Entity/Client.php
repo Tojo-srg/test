@@ -9,11 +9,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={
+            "groups"={"clients_read"}
+ *     }
+ * )
  * @ApiFilter(SearchFilter::class)
+ * @ApiFilter(OrderFilter::class)
  */
 class Client
 {
@@ -21,42 +28,72 @@ class Client
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"clients_read", "factures_read"})
      */
     private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"clients_read", "factures_read"})
      */
     private ?string $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"clients_read", "factures_read"})
      */
     private ?string $prenom;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"clients_read", "factures_read"})
      */
     private ?string $email;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"clients_read", "factures_read"})
      */
     private ?string $entreprise;
 
     /**
      * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="client")
+     * @Groups({"clients_read"})
      */
     private Collection $factures;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="clients")
+     * @Groups({"clients_read"})
      */
-    private $user;
+    private ?User $user;
 
     public function __construct()
     {
         $this->factures = new ArrayCollection();
+    }
+
+    /**
+     * @Groups({"clients_read"})
+     * @return float
+     */
+    public function getMontantTotal(): float
+    {
+        return array_reduce($this->factures->toArray(), function ($total, $facture) {
+            return $total + $facture->getMontant();
+        }, 0);
+    }
+
+    /**
+     * Récupérer montant total non payé
+     * @Groups({"clients_read"})
+     * @return float
+     */
+    public function getMontantNonPaye(): float
+    {
+        return array_reduce($this->factures->toArray(), function ($total, $facture) {
+            return $total + ($facture->getStatus() === "PAID" || $facture->getStatus() === "CANCELED" ? 0 : $facture->getMontant());
+        });
     }
 
     public function getId(): ?int
