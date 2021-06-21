@@ -13,7 +13,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ApiResource()
+ * @ApiResource(
+ *     normalizationContext={"groups"={"users_read"}}
+ * )
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -21,13 +23,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"clients_read", "factures_read", "factures_subresource"})
+     * @Groups({"clients_read", "factures_read", "factures_subresource", "users_read"})
      */
     private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups("clients_read", "factures_read", "factures_subresource")
+     * @Groups("clients_read", "factures_read", "factures_subresource", "users_read")
      */
     private ?string $email;
 
@@ -44,13 +46,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"clients_read", "factures_read", "factures_subresource"})
+     * @Groups({"clients_read", "factures_read", "factures_subresource", "users_read"})
      */
     private ?string $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"clients_read", "factures_read", "factures_subresource"})
+     * @Groups({"clients_read", "factures_read", "factures_subresource", "users_read"})
      */
     private ?string $prenom;
 
