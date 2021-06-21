@@ -12,6 +12,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=FactureRepository::class)
  * @ApiResource(
+ *     subresourceOperations={
+            "api_clients_factures_get_subresource"={
+ *              "normalization_context"={"groups"={"factures_subresource"}}
+ *          }
+ *     },
  *     attributes={
             "pagination_enabled"=true,
  *          "pagination_items_per_page"=10,
@@ -29,25 +34,25 @@ class Facture
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"factures_read", "clients_read"})
+     * @Groups({"factures_read", "clients_read", "factures_subresource"})
      */
     private ?int $id;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"factures_read", "clients_read"})
+     * @Groups({"factures_read", "clients_read", "factures_subresource"})
      */
     private ?float $montant;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"factures_read", "clients_read"})
+     * @Groups({"factures_read", "clients_read", "factures_subresource"})
      */
     private ?\DateTimeInterface $envoye;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"factures_read", "clients_read"})
+     * @Groups({"factures_read", "clients_read", "factures_subresource"})
      */
     private ?string $status;
 
@@ -60,14 +65,14 @@ class Facture
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups({"factures_read", "clients_read"})
+     * @Groups({"factures_read", "clients_read", "factures_subresource"})
      */
     private ?int $chrono;
 
     /**
      * Récupérer le User à qui appartient la facture
      *
-     * @Groups({"factures_read"})
+     * @Groups({"factures_read", "factures_subresource"})
      * @return User|null
      */
     public function getUser(): ?User

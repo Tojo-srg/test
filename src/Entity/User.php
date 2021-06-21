@@ -21,13 +21,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"clients_read", "factures_read"})
+     * @Groups({"clients_read", "factures_read", "factures_subresource"})
      */
     private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups("clients_read", "factures_read")
+     * @Groups("clients_read", "factures_read", "factures_subresource")
      */
     private ?string $email;
 
@@ -44,13 +44,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"clients_read", "factures_read"})
+     * @Groups({"clients_read", "factures_read", "factures_subresource"})
      */
     private ?string $nom;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"clients_read", "factures_read"})
+     * @Groups({"clients_read", "factures_read", "factures_subresource"})
      */
     private ?string $prenom;
 

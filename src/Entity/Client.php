@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,6 +16,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=ClientRepository::class)
  * @ApiResource(
+ *     collectionOperations={"GET", "POST"},
+ *     itemOperations={"GET", "PUT", "DELETE"},
+ *     subresourceOperations={
+            "factures_get_subresource"={"path"="/clients/{id}/factures"}
+ *     },
  *     normalizationContext={
             "groups"={"clients_read"}
  *     }
@@ -59,6 +65,7 @@ class Client
     /**
      * @ORM\OneToMany(targetEntity=Facture::class, mappedBy="client")
      * @Groups({"clients_read"})
+     * @ApiSubresource()
      */
     private Collection $factures;
 
